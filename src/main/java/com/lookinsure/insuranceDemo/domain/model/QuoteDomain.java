@@ -1,4 +1,4 @@
-package com.lookinsure.insuranceDemo.domain.quote;
+package com.lookinsure.insuranceDemo.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
