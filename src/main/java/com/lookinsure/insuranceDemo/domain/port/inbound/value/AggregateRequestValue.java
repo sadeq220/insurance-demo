@@ -1,4 +1,4 @@
-package com.lookinsure.insuranceDemo.domain.port.inbound;
+package com.lookinsure.insuranceDemo.domain.port.inbound.value;
 
 public record AggregateRequestValue(String sortBy,
                                     Integer size,
