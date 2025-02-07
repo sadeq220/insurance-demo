@@ -7,5 +7,7 @@ import java.util.List;
 public record QuoteAggregateRepositoryResponseValue(List<QuoteDomain> quoteDomains,
                                                     Integer size,
                                                     Integer page,
-                                                    String sortedBy) {
+                                                    String sortedBy,
+                                                    Integer totalPages,
+                                                    Long totalElements) {
 }
