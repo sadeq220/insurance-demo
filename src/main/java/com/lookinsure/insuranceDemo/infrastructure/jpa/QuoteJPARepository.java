@@ -25,7 +25,7 @@ public class QuoteJPARepository implements QuoteRepository {
         PageRequest pageRequest = PageRequest.of(aggregateRequestValue.page(),
                 aggregateRequestValue.size(),
                 Sort.by(aggregateRequestValue.sortBy()));
-        Page<QuoteDomain> sortedQuotes = quoteJPARepositoryDAO.findAll(pageRequest);
+        Page<QuoteDomain> sortedQuotes = quoteJPARepositoryDAO.aggregateQuotes(pageRequest);
         return new QuoteAggregateRepositoryResponseValue(sortedQuotes.getContent(),
                 sortedQuotes.getSize(),
                 sortedQuotes.getNumber(),
