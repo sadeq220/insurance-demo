@@ -1,4 +1,4 @@
-package com.lookinsure.insuranceDemo.domain.port.inbound.value;
+package com.lookinsure.insuranceDemo.domain.port.value;
 
 import java.util.List;
 
