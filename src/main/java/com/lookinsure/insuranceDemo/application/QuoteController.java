@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+/**
+ * restful API adapter
+ */
 @RestController
 @RequestMapping("/v1/quotes")
 public class QuoteController {
