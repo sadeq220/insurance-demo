@@ -1,7 +1,10 @@
 package com.lookinsure.insuranceDemo.domain.model;
 
+import com.lookinsure.insuranceDemo.domain.model.ex.QuoteCoverageNotValidException;
+import com.lookinsure.insuranceDemo.domain.model.ex.QuotePolicyLimitNotValidException;
+import com.lookinsure.insuranceDemo.domain.model.ex.QuotePriceNotValidException;
 import com.lookinsure.insuranceDemo.domain.port.value.AddQuoteValue;
-import com.lookinsure.insuranceDemo.domain.service.ex.AddQuoteRequestNotValidException;
+import com.lookinsure.insuranceDemo.domain.port.value.UpdateQuoteValue;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,17 +42,44 @@ public class QuoteDomain {
         QuoteDomain quoteDomain = (QuoteDomain) obj;
         return this.id != null && this.id.equals(quoteDomain.id);
     }
+
+    public void setPrice(Long price) {
+        if (price < 1) {
+            throw new QuotePriceNotValidException();
+        }
+        this.price = price;
+    }
+
+    public void setPolicyLimit(Long policyLimit) {
+        if (policyLimit < 1) {
+            throw new QuotePolicyLimitNotValidException();
+        }
+        this.policyLimit = policyLimit;
+    }
+
+    public void update(UpdateQuoteValue updateQuoteValue){
+        String coverageTypeString = updateQuoteValue.coverageType();
+        try {
+            CoverageType coverageType = CoverageType.valueOf(coverageTypeString);
+            this.setPolicyLimit(updateQuoteValue.policyLimit());
+            this.setPrice(updateQuoteValue.price());
+            this.setCoverageType(coverageType);
+        }catch (IllegalArgumentException ex){
+            throw new QuoteCoverageNotValidException();
+        }
+    }
+
     public static QuoteDomain create(AddQuoteValue addQuoteValue){
         String coverageTypeString = addQuoteValue.coverageType();
         try {
             CoverageType coverageType = CoverageType.valueOf(coverageTypeString);
             QuoteDomain quoteDomain = new QuoteDomain();
-            quoteDomain.coverageType=coverageType;
-            quoteDomain.price= addQuoteValue.price();
-            quoteDomain.policyLimit= addQuoteValue.policyLimit();
+            quoteDomain.setCoverageType(coverageType);
+            quoteDomain.setPrice( addQuoteValue.price());
+            quoteDomain.setPolicyLimit(addQuoteValue.policyLimit());
             return quoteDomain;
         } catch (IllegalArgumentException ex){
-            throw new AddQuoteRequestNotValidException("ADD_QUOTE_COVERAGE_INVALID");
+            throw new QuoteCoverageNotValidException();
         }
 
     }

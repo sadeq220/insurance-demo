@@ -71,6 +71,16 @@ public class QuoteService implements QuotePort {
         return quoteDomainMapper.toValue(quoteDomain);
     }
 
+    @Transactional
+    @Override
+    public QuoteValue updateQuote(Long id, UpdateQuoteValue updateQuoteValue) {
+        Optional<QuoteDomain> optionalQuoteDomain = quoteRepository.getQuote(id);
+        optionalQuoteDomain.orElseThrow(QuoteNotFoundException::new);
+        QuoteDomain quoteDomain = optionalQuoteDomain.get();
+        quoteDomain.update(updateQuoteValue);
+        return quoteDomainMapper.toValue(quoteDomain);
+    }
+
     /**
      * check business rules
      */

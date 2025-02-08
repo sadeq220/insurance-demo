@@ -3,10 +3,7 @@ package com.lookinsure.insuranceDemo.application.rest;
 import com.lookinsure.insuranceDemo.application.rest.dto.*;
 import com.lookinsure.insuranceDemo.domain.port.inbound.QuotePort;
 import com.lookinsure.insuranceDemo.domain.port.outbound.CacheQuotePort;
-import com.lookinsure.insuranceDemo.domain.port.value.AddQuoteValue;
-import com.lookinsure.insuranceDemo.domain.port.value.AggregateRequestValue;
-import com.lookinsure.insuranceDemo.domain.port.value.AggregateResponseValue;
-import com.lookinsure.insuranceDemo.domain.port.value.QuoteValue;
+import com.lookinsure.insuranceDemo.domain.port.value.*;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -46,6 +43,12 @@ public class QuoteController {
     @DeleteMapping("/{id}")
     public QuoteDTO deleteQuote(@PathVariable("id") Long id){
         QuoteValue quoteValue = quotePort.removeQuote(id);
+        return quoteDtoMapper.toDto(quoteValue);
+    }
+    @PutMapping("/{id}")
+    public QuoteDTO updateQuote(@PathVariable("id") Long id,@RequestBody UpdateQuoteDto updateQuoteDto){
+        UpdateQuoteValue updateQuoteValue = quoteDtoMapper.toValue(updateQuoteDto);
+        QuoteValue quoteValue = quotePort.updateQuote(id, updateQuoteValue);
         return quoteDtoMapper.toDto(quoteValue);
     }
 }
