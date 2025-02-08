@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "provider")
-@Table(name = "PROVIDER")
+@Table(name = "provider")
 @Getter
 @Setter
 public class InsuranceProviderDomain {

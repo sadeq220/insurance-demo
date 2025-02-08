@@ -5,6 +5,8 @@ Technology stack includes:
 - Spring Cache abstraction
 - Spring data JPA
 - H2 
+- Lombok
+- Mapstruct
 
 #### Caching
 Cache mechanism implemented using `Spring Cache abstraction` and ConcurrentHashMap as cache storage.    
