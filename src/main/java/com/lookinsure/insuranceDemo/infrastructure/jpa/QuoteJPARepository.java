@@ -33,4 +33,9 @@ public class QuoteJPARepository implements QuoteRepository {
                 sortedQuotes.getTotalPages(),
                 sortedQuotes.getTotalElements());
     }
+
+    @Override
+    public QuoteDomain saveQuote(QuoteDomain quoteDomain) {
+        return quoteJPARepositoryDAO.save(quoteDomain);
+    }
 }

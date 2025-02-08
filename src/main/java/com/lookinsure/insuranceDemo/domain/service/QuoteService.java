@@ -1,26 +1,32 @@
 package com.lookinsure.insuranceDemo.domain.service;
 
-import com.lookinsure.insuranceDemo.domain.port.value.AggregateRequestValue;
-import com.lookinsure.insuranceDemo.domain.port.value.AggregateResponseValue;
+import com.lookinsure.insuranceDemo.domain.model.InsuranceProviderDomain;
+import com.lookinsure.insuranceDemo.domain.model.QuoteDomain;
+import com.lookinsure.insuranceDemo.domain.port.outbound.InsuranceProviderRepository;
+import com.lookinsure.insuranceDemo.domain.port.value.*;
 import com.lookinsure.insuranceDemo.domain.port.inbound.QuotePort;
 import com.lookinsure.insuranceDemo.domain.port.outbound.QuoteRepository;
-import com.lookinsure.insuranceDemo.domain.port.value.QuoteAggregateRepositoryResponseValue;
-import com.lookinsure.insuranceDemo.domain.port.value.QuoteValue;
 import com.lookinsure.insuranceDemo.domain.service.ex.AggregateRequestNotValidException;
+import com.lookinsure.insuranceDemo.domain.service.ex.InsuranceProviderNotFoundException;
 import com.lookinsure.insuranceDemo.domain.service.mapper.QuoteDomainMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QuoteService implements QuotePort {
     private final QuoteRepository quoteRepository;
     private final QuoteDomainMapper quoteDomainMapper;
+    private final InsuranceProviderRepository insuranceProviderRepository;
 
-    public QuoteService(QuoteRepository quoteRepository, QuoteDomainMapper quoteDomainMapper) {
+    public QuoteService(QuoteRepository quoteRepository,
+                        QuoteDomainMapper quoteDomainMapper,
+                        InsuranceProviderRepository insuranceProviderRepository) {
         this.quoteRepository = quoteRepository;
         this.quoteDomainMapper = quoteDomainMapper;
+        this.insuranceProviderRepository = insuranceProviderRepository;
     }
 
     @Transactional
@@ -33,6 +39,17 @@ public class QuoteService implements QuotePort {
                 aggregateResponse.size(),
                 aggregateResponse.page(),
                 aggregateResponse.sortedBy());
+    }
+
+    @Transactional
+    @Override
+    public QuoteValue addQuote(AddQuoteValue addQuoteValue) {
+        QuoteDomain quoteDomain = QuoteDomain.create(addQuoteValue);
+        Optional<InsuranceProviderDomain> insuranceProviderDomain = insuranceProviderRepository.find(addQuoteValue.providerId());
+        insuranceProviderDomain.orElseThrow(InsuranceProviderNotFoundException::new);
+        insuranceProviderDomain.get().addQuote(quoteDomain);
+        QuoteDomain persistedQuote = quoteRepository.saveQuote(quoteDomain);// to populate generated Id
+        return quoteDomainMapper.toValue(persistedQuote);
     }
 
     /**

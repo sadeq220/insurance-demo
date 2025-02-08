@@ -1,5 +1,6 @@
 package com.lookinsure.insuranceDemo.application.rest.dto;
 
+import com.lookinsure.insuranceDemo.domain.port.value.AddQuoteValue;
 import com.lookinsure.insuranceDemo.domain.port.value.AggregateRequestValue;
 import com.lookinsure.insuranceDemo.domain.port.value.AggregateResponseValue;
 import com.lookinsure.insuranceDemo.domain.port.value.QuoteValue;
@@ -15,4 +16,6 @@ public interface QuoteDtoMapper {
 
     @Mapping(target = "insuranceProvider", source = "insuranceProviderValue")
     QuoteDTO toDto(QuoteValue quoteValue);
+
+    AddQuoteValue toValue(AddQuoteDto addQuoteDto);
 }

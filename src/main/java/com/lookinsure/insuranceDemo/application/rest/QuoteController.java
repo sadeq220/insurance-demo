@@ -1,16 +1,13 @@
 package com.lookinsure.insuranceDemo.application.rest;
 
-import com.lookinsure.insuranceDemo.application.rest.dto.QuoteAggregateInputDto;
-import com.lookinsure.insuranceDemo.application.rest.dto.QuoteAggregateOutputDto;
-import com.lookinsure.insuranceDemo.application.rest.dto.QuoteDtoMapper;
+import com.lookinsure.insuranceDemo.application.rest.dto.*;
 import com.lookinsure.insuranceDemo.domain.port.inbound.QuotePort;
 import com.lookinsure.insuranceDemo.domain.port.outbound.CacheQuotePort;
+import com.lookinsure.insuranceDemo.domain.port.value.AddQuoteValue;
 import com.lookinsure.insuranceDemo.domain.port.value.AggregateRequestValue;
 import com.lookinsure.insuranceDemo.domain.port.value.AggregateResponseValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.lookinsure.insuranceDemo.domain.port.value.QuoteValue;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * restful API adapter
@@ -33,5 +30,12 @@ public class QuoteController {
         AggregateRequestValue aggregateRequestValue = quoteDtoMapper.toValue(quoteAggregateInputDto);
         AggregateResponseValue aggregateResponse = cacheQuotePort.aggregate(aggregateRequestValue);
         return quoteDtoMapper.toDto(aggregateResponse);
+    }
+
+    @PostMapping
+    public QuoteDTO addQuote(@RequestBody AddQuoteDto addQuoteDto){
+        AddQuoteValue addQuoteValue = quoteDtoMapper.toValue(addQuoteDto);
+        QuoteValue quoteValue = quotePort.addQuote(addQuoteValue);
+        return quoteDtoMapper.toDto(quoteValue);
     }
 }
