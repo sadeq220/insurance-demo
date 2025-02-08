@@ -33,3 +33,12 @@ Add some quotes to insurance providers
 ```shell
  curl -i -X POST --data '{"providerId":1,"price":2000,"coverageType":"CAR","policyLimit":20000}' -H 'Content-Type:application/json' http://localhost:8080/v1/quotes
 ```
+To aggregate quotes, three parameters are added by default, you can change them by providing corresponding *request param*.   
+- sortBy="price"
+- size=10
+- page=0
+
+For example to change *sortBy* parameter: 
+```shell
+curl -i http://localhost:8080/v1/quotes/aggregate?sortBy=policylimit
+```

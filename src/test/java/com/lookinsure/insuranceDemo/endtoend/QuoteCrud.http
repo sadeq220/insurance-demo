@@ -1,0 +1,10 @@
+### Add Quote
+POST http://localhost:8080/v1/quotes
+Content-Type: application/json
+
+{
+  "providerId": 1,
+  "price": 2300,
+  "coverageType": "CAR",
+  "policyLimit": 25000
+}
