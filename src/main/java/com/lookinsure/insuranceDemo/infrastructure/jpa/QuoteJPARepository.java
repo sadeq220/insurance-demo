@@ -43,6 +43,6 @@ public class QuoteJPARepository implements QuoteRepository {
 
     @Override
     public Optional<QuoteDomain> getQuote(Long id) {
-        return quoteJPARepositoryDAO.findById(id);
+        return quoteJPARepositoryDAO.getQuoteDomain(id);
     }
 }
