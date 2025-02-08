@@ -8,6 +8,7 @@ import com.lookinsure.insuranceDemo.domain.port.inbound.QuotePort;
 import com.lookinsure.insuranceDemo.domain.port.outbound.QuoteRepository;
 import com.lookinsure.insuranceDemo.domain.service.ex.AggregateRequestNotValidException;
 import com.lookinsure.insuranceDemo.domain.service.ex.InsuranceProviderNotFoundException;
+import com.lookinsure.insuranceDemo.domain.service.ex.QuoteNotFoundException;
 import com.lookinsure.insuranceDemo.domain.service.mapper.QuoteDomainMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +51,14 @@ public class QuoteService implements QuotePort {
         insuranceProviderDomain.get().addQuote(quoteDomain);
         QuoteDomain persistedQuote = quoteRepository.saveQuote(quoteDomain);// to populate generated Id
         return quoteDomainMapper.toValue(persistedQuote);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public QuoteValue getQuote(Long id) {
+        Optional<QuoteDomain> optionalQuoteDomain = quoteRepository.getQuote(id);
+        optionalQuoteDomain.orElseThrow(QuoteNotFoundException::new);
+        return quoteDomainMapper.toValue(optionalQuoteDomain.get());
     }
 
     /**

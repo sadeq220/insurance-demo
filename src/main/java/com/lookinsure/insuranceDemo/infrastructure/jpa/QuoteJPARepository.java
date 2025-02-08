@@ -9,6 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * JPA adapter
  */
@@ -37,5 +39,10 @@ public class QuoteJPARepository implements QuoteRepository {
     @Override
     public QuoteDomain saveQuote(QuoteDomain quoteDomain) {
         return quoteJPARepositoryDAO.save(quoteDomain);
+    }
+
+    @Override
+    public Optional<QuoteDomain> getQuote(Long id) {
+        return quoteJPARepositoryDAO.findById(id);
     }
 }

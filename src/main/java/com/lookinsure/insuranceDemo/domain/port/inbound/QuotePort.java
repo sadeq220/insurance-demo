@@ -8,4 +8,6 @@ import com.lookinsure.insuranceDemo.domain.port.value.QuoteValue;
 public interface QuotePort {
     AggregateResponseValue aggregate(AggregateRequestValue aggregateRequestValue);
     QuoteValue addQuote(AddQuoteValue addQuoteValue);
+
+    QuoteValue getQuote(Long id);
 }

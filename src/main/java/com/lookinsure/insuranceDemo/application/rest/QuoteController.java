@@ -33,9 +33,14 @@ public class QuoteController {
     }
 
     @PostMapping
-    public QuoteDTO addQuote(@RequestBody AddQuoteDto addQuoteDto){
+    public QuoteDTO createQuote(@RequestBody AddQuoteDto addQuoteDto){
         AddQuoteValue addQuoteValue = quoteDtoMapper.toValue(addQuoteDto);
         QuoteValue quoteValue = quotePort.addQuote(addQuoteValue);
+        return quoteDtoMapper.toDto(quoteValue);
+    }
+    @GetMapping("/{id}")
+    public QuoteDTO readQuote(@PathVariable("id") Long id) {
+        QuoteValue quoteValue = quotePort.getQuote(id);
         return quoteDtoMapper.toDto(quoteValue);
     }
 }
