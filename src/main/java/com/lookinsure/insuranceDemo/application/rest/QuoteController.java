@@ -24,8 +24,8 @@ public class QuoteController {
         this.quoteDtoMapper = quoteDtoMapper;
     }
 
-    @GetMapping("aggregate")
-    public QuoteAggregateOutputDto aggregateQuotes(@RequestBody QuoteAggregateInputDto quoteAggregateInputDto){
+    @GetMapping("/aggregate")
+    public QuoteAggregateOutputDto aggregateQuotes(@ModelAttribute QuoteAggregateInputDto quoteAggregateInputDto){
         AggregateRequestValue aggregateRequestValue = quoteDtoMapper.toValue(quoteAggregateInputDto);
         AggregateResponseValue aggregateResponse = cacheQuotePort.aggregate(aggregateRequestValue);
         return quoteDtoMapper.toDto(aggregateResponse);
