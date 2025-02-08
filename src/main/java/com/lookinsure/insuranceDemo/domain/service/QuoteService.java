@@ -33,8 +33,8 @@ public class QuoteService implements QuotePort {
     @Transactional
     @Override
     public AggregateResponseValue aggregate(AggregateRequestValue aggregateRequestValue) {
-        validateAggregateRequest(aggregateRequestValue);
-        QuoteAggregateRepositoryResponseValue aggregateResponse = quoteRepository.aggregate(aggregateRequestValue);
+        AggregateRequestValue reformedAggregateRequest = validateAggregateRequest(aggregateRequestValue);
+        QuoteAggregateRepositoryResponseValue aggregateResponse = quoteRepository.aggregate(reformedAggregateRequest);
         List<QuoteValue> quoteValues = aggregateResponse.quoteDomains().stream().map(quoteDomain -> quoteDomainMapper.toValue(quoteDomain)).toList();
         return new AggregateResponseValue(quoteValues,
                 aggregateResponse.size(),
@@ -92,17 +92,20 @@ public class QuoteService implements QuotePort {
     /**
      * check business rules
      */
-    private void validateAggregateRequest(AggregateRequestValue aggregateRequestValue) {
-        try {
-            SortBy.valueOf(aggregateRequestValue.sortBy().toUpperCase());
-        } catch (IllegalArgumentException ex) {
-            throw new AggregateRequestNotValidException("QUOTE_AGGREGATE_SORT_INVALID");
-        }
+    private AggregateRequestValue validateAggregateRequest(AggregateRequestValue aggregateRequestValue) {
         if (aggregateRequestValue.size() < 1) {
             throw new AggregateRequestNotValidException("QUOTE_AGGREGATE_SIZE_INVALID");
         }
         if (aggregateRequestValue.page() < 0) {
             throw new AggregateRequestNotValidException("QUOTE_AGGREGATE_PAGE_INVALID");
+        }
+        try {
+            SortBy sortBy = SortBy.valueOf(aggregateRequestValue.sortBy().toUpperCase());
+            return new AggregateRequestValue(sortBy.getFieldName(),
+                    aggregateRequestValue.size(),
+                    aggregateRequestValue.page());
+        } catch (IllegalArgumentException ex) {
+            throw new AggregateRequestNotValidException("QUOTE_AGGREGATE_SORT_INVALID");
         }
     }
 
@@ -110,6 +113,14 @@ public class QuoteService implements QuotePort {
      * accepted sort params
      */
     private enum SortBy{
-        PRICE,LIMIT_PRICE
+        PRICE("price"),POLICYLIMIT("policyLimit");
+        private final String fieldName;
+        SortBy(String fieldName) {
+            this.fieldName=fieldName;
+        }
+
+        public String getFieldName() {
+            return fieldName;
+        }
     }
 }
