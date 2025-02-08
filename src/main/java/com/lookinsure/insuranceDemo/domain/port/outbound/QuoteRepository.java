@@ -12,4 +12,6 @@ public interface QuoteRepository {
     QuoteDomain saveQuote(QuoteDomain quoteDomain);
 
     Optional<QuoteDomain> getQuote(Long id);
+
+    void removeQuote(QuoteDomain quoteDomain);
 }

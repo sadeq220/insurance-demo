@@ -43,4 +43,9 @@ public class QuoteController {
         QuoteValue quoteValue = quotePort.getQuote(id);
         return quoteDtoMapper.toDto(quoteValue);
     }
+    @DeleteMapping("/{id}")
+    public QuoteDTO deleteQuote(@PathVariable("id") Long id){
+        QuoteValue quoteValue = quotePort.removeQuote(id);
+        return quoteDtoMapper.toDto(quoteValue);
+    }
 }

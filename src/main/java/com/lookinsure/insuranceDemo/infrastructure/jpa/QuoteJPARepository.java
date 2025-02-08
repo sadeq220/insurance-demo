@@ -45,4 +45,9 @@ public class QuoteJPARepository implements QuoteRepository {
     public Optional<QuoteDomain> getQuote(Long id) {
         return quoteJPARepositoryDAO.getQuoteDomain(id);
     }
+
+    @Override
+    public void removeQuote(QuoteDomain quoteDomain) {
+        quoteJPARepositoryDAO.delete(quoteDomain);
+    }
 }
