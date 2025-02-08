@@ -6,6 +6,8 @@ import com.lookinsure.insuranceDemo.domain.port.outbound.CacheQuotePort;
 import com.lookinsure.insuranceDemo.domain.port.value.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * restful API adapter
  */
@@ -39,6 +41,11 @@ public class QuoteController {
     public QuoteDTO readQuote(@PathVariable("id") Long id) {
         QuoteValue quoteValue = quotePort.getQuote(id);
         return quoteDtoMapper.toDto(quoteValue);
+    }
+    @GetMapping
+    public List<QuoteDTO> listAllQuotes(){
+        List<QuoteValue> quoteValues = quotePort.listAllQuotes();
+        return quoteValues.stream().map(quoteDtoMapper::toDto).toList();
     }
     @DeleteMapping("/{id}")
     public QuoteDTO deleteQuote(@PathVariable("id") Long id){

@@ -81,6 +81,14 @@ public class QuoteService implements QuotePort {
         return quoteDomainMapper.toValue(quoteDomain);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<QuoteValue> listAllQuotes() {
+        List<QuoteDomain> quoteDomains = quoteRepository.listAllQuotes();
+        List<QuoteValue> quoteValues = quoteDomains.stream().map(quoteDomainMapper::toValue).toList();
+        return quoteValues;
+    }
+
     /**
      * check business rules
      */

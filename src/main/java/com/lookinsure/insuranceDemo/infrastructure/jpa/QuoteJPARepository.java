@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -49,5 +50,10 @@ public class QuoteJPARepository implements QuoteRepository {
     @Override
     public void removeQuote(QuoteDomain quoteDomain) {
         quoteJPARepositoryDAO.delete(quoteDomain);
+    }
+
+    @Override
+    public List<QuoteDomain> listAllQuotes() {
+        return quoteJPARepositoryDAO.findAll();
     }
 }
